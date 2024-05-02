@@ -1,0 +1,18 @@
+[window]
+dynamic_padding = true
+padding = { x = 0, y = 0 }
+
+
+[font]
+size = 12
+
+[font.normal]
+family = "FiraCode Nerd Font"
+
+[[keyboard.bindings]]
+key = "N"
+mods = "Command"
+action = "CreateNewWindow"
+
+[colors.primary]
+background = "#151515"
