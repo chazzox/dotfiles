@@ -4,7 +4,6 @@ end
 function ra; tmux attach-session -d -t base; end
 function ran; tmux new-session -d -s base; end
 function glow; GLOW -p; end
-function latexindent.pl; latexindent; end
 
 function ls
   command eza $argv --icons 
@@ -22,7 +21,6 @@ if not set -q TMUX
 end
 
 
-set -gx CPATH "/Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk/System/Library/Perl/5.28/darwin-thread-multi-2level/CORE"
 set -gx EDITOR "nvim"
 
 # jfrog env settings 
@@ -34,8 +32,6 @@ set -gx JFROG_PLATFORM_READ_TOKEN_BASE64 "$(echo -n $JFROG_PLATFORM_READ_TOKEN |
 set -Ux PYENV_ROOT $HOME/.pyenv
 fish_add_path $PYENV_ROOT/bin
 
-fish_add_path /Users/charlie/.spicetify
-
 oh-my-posh --init --shell fish --config ~/mytheme.omp.json | source
 pyenv init - | source
 source (pack completion --shell fish)
@@ -46,3 +42,7 @@ if not string match -q -- $PNPM_HOME $PATH
   set -gx PATH "$PNPM_HOME" $PATH
 end
 # pnpm end
+
+# aws completions
+complete --command aws --no-files --arguments '(begin; set --local --export COMP_SHELL fish; set --local --export COMP_LINE (commandline); aws_completer | sed \'s/ $//\'; end)'
+
