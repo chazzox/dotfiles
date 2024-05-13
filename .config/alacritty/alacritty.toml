@@ -1,9 +1,12 @@
-working_directory = "~/Documents"
+# root stuff
+working_directory = "/Users/charlie/Documents/"
+live_config_reload = true
 
 [window]
 dynamic_padding = true
-padding = { x = 0, y = 0 }
-
+padding = { x = 0, y = 25 }
+opacity = 0.8
+decorations = "Transparent"
 
 [font]
 size = 12
@@ -47,3 +50,4 @@ blue     = '#C1E3FE'
 magenta  = '#FFB1FE'
 cyan     = '#E5E6FE'
 white    = '#FFFEFF'
+
