@@ -1,8 +1,10 @@
 function lsd 
   eza --icons -alh $argv
 end
+
 function ra; tmux attach-session -d -t base; end
 function ran; tmux new-session -d -s base; end
+
 function glow; GLOW -p; end
 
 function ls
@@ -20,7 +22,6 @@ if not set -q TMUX
 	ra
 end
 
-
 set -gx EDITOR "nvim"
 
 # jfrog env settings 
@@ -34,7 +35,7 @@ fish_add_path $PYENV_ROOT/bin
 
 oh-my-posh --init --shell fish --config ~/mytheme.omp.json | source
 pyenv init - | source
-source (pack completion --shell fish)
+fnm env --use-on-cd | source
 
 # pnpm
 set -gx PNPM_HOME "/Users/charlie/Library/pnpm"
@@ -46,3 +47,10 @@ end
 # aws completions
 complete --command aws --no-files --arguments '(begin; set --local --export COMP_SHELL fish; set --local --export COMP_LINE (commandline); aws_completer | sed \'s/ $//\'; end)'
 
+# pack completions (docker image build system)
+source (pack completion --shell fish)
+
+# docker completions 
+source (docker completion fish | psub)
+
+source (fnm completions --shell fish | psub)

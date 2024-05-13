@@ -1,3 +1,5 @@
+working_directory = "~/Documents"
+
 [window]
 dynamic_padding = true
 padding = { x = 0, y = 0 }
@@ -14,5 +16,34 @@ key = "N"
 mods = "Command"
 action = "CreateNewWindow"
 
+# https://github.com/alacritty/alacritty-theme/blob/master/themes/pastel_dark.toml
 [colors.primary]
-background = "#151515"
+background = '#000000'
+foreground = '#C7C7C7'
+
+# Cursor colors
+[colors.cursor]
+text    = '#FFFEFF'
+cursor  = '#FFB472'
+
+# Normal colors
+[colors.normal]
+black    = '#616161'
+red      = '#FF8272'
+green    = '#B4FA72'
+yellow   = '#FEFDC2'
+blue     = '#A5D5FE'
+magenta  = '#FF8FFD'
+cyan     = '#D0D1FE'
+white    = '#F1F1F1'
+
+# Bright colors
+[colors.bright]
+black    = '#8E8E8E'
+red      = '#FFC4BD'
+green    = '#D6FCB9'
+yellow   = '#FEFDD5'
+blue     = '#C1E3FE'
+magenta  = '#FFB1FE'
+cyan     = '#E5E6FE'
+white    = '#FFFEFF'
