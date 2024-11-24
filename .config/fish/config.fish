@@ -2,6 +2,23 @@ function lsd
   eza --icons -alh $argv
 end
 
+function progress-commit
+ set -f commit_name (git rev-parse --abbrev-ref HEAD | tr '/' '\n' | sed -n 2p)
+ read -p "set_color green; echo -n 'commit description'; set_color normal; echo -n ': '" commit_description
+ git add .
+
+ if not [ "$commit_description" ]
+   set -f commit_description "progress commit"
+ end
+
+ if [ "$commit_name" ]
+   set -f commit_name "($commit_name)"
+ else 
+   set -f commit_name ""
+  end
+ git commit -am "feat$commit_name: $commit_description"
+end
+
 function ra; tmux attach-session -d -t base; end
 function ran; tmux new-session -d -s base; end
 
@@ -17,6 +34,7 @@ if not set -q TMUX
    and test "$TERM_PROGRAM" != "intellij"
    and test "$TERM_PROGRAM" != "\"intellij\""
    and test "$TERM_PROGRAM" != "OpenLens"
+   and test "$TERMINAL_EMULATOR" != "JetBrains-JediTerm"
     set -g TMUX ran
     eval $TMUX
 	ra
@@ -24,13 +42,11 @@ end
 
 set -gx EDITOR "nvim"
 
-# jfrog env settings 
-set -gx EMAIL "charlie.aylott@matillion.com"
-set -gx JFROG_PLATFORM_READ_USER "$EMAIL"
-set -gx JFROG_PLATFORM_READ_TOKEN "eyJ2ZXIiOiIyIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYiLCJraWQiOiJoaHEweEZza1dpaElFdUNscFozamJZM0Z2cUthMndYUkJMWVl3eDdoN19rIn0.eyJzdWIiOiJqZmFjQDAxZmp2OHM0OHEyNGRuMXhuN2pyYW0wMjZ6L3VzZXJzL2NoYXJsaWUuYXlsb3R0QG1hdGlsbGlvbi5jb20iLCJzY3AiOiJhcHBsaWVkLXBlcm1pc3Npb25zL3VzZXIiLCJhdWQiOiIqQCoiLCJpc3MiOiJqZmFjQDAxZmp2OHM0OHEyNGRuMXhuN2pyYW0wMjZ6IiwiZXhwIjoxNzIxMzEyODYwLCJpYXQiOjE2ODk3NzY4NjAsImp0aSI6IjRkZGY3ZDIwLTc3OTktNDIzNC1iMTcwLWZlYWI3NDQzNjk3MyJ9.cQdY93_JORid-i7QDMRZwvKuzd_rbeiWoR_GPrqcJ-EgqTpoVyf3r87hWMOHohgj7Wodyvc8QdRo77tYTFjlt_Om6e7N7qta29__uLoOQNUHxCYVLz_zi_Z7M0bNTt942VzU8p8d5BM0wn-U-eZhL7dzsOJ7nJPHsq4IgA8pvEgSWcs1q_Kj454RZCK9ysi_5vxf5m1PckV0arkIAvODz2RZiGlHI3T_e6VP8efp0_weMYf0fFw5H_8SEpqmQNB9hLgmPRb3jRODZGXrjKJeKue5fzX8JN9cpTSQvW8UaEv5sApVnzZ_ur1jKgn7ef06yFYzav3KsccRsvPKypyYyA"
-set -gx JFROG_PLATFORM_READ_TOKEN_BASE64 "$(echo -n $JFROG_PLATFORM_READ_TOKEN | base64)" 
+source $HOME/.config/fish/work-secrets.fish
 
 set -Ux PYENV_ROOT $HOME/.pyenv
+
+
 fish_add_path $PYENV_ROOT/bin
 
 oh-my-posh --init --shell fish --config ~/mytheme.omp.json | source
@@ -50,7 +66,12 @@ complete --command aws --no-files --arguments '(begin; set --local --export COMP
 # pack completions (docker image build system)
 source (pack completion --shell fish)
 
-# docker completions 
-source (docker completion fish | psub)
-
 source (fnm completions --shell fish | psub)
+
+
+set -g sysName (uname)
+if test "$sysName" = "Darwin"
+  defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+end
+
+bind \cw backward-kill-word

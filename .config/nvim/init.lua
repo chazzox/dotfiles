@@ -14,11 +14,13 @@ require('packer').startup(function(use)
   use 'dag/vim-fish' -- fish syntax 
   use {'mboughaba/i3config.vim', ft="i3config"} -- i3 config support 
   use 'wuelnerdotexe/vim-astro'
+  use 'hashivim/vim-terraform'
 
   use {'nyoom-engineering/oxocarbon.nvim'}  
 end)
 
 -- editor stuff
+vim.opt.clipboard:append { 'unnamed', 'unnamedplus' }
 vim.o.termguicolors = true 
 vim.opt.encoding = "UTF-8" 
 vim.opt.cursorline = true 
@@ -40,5 +42,6 @@ vim.opt.title = true
 vim.opt.background = "dark" -- set this to dark or light
 vim.cmd.colorscheme "oxocarbon"
 
-vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+
+-- vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+-- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
