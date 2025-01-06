@@ -48,8 +48,10 @@ set -Ux PYENV_ROOT $HOME/.pyenv
 
 
 fish_add_path $PYENV_ROOT/bin
+fish_add_path $HOME/bin
 
-~/bin/oh-my-posh --init --shell fish --config ~/mytheme.omp.json | source
+
+oh-my-posh --init --shell fish --config ~/mytheme.omp.json | source
 pyenv init - | source
 fnm env --use-on-cd | source
 
