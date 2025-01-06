@@ -42,14 +42,14 @@ end
 
 set -gx EDITOR "nvim"
 
-source $HOME/.config/fish/work-secrets.fish
+# source $HOME/.config/fish/work-secrets.fish
 
 set -Ux PYENV_ROOT $HOME/.pyenv
 
 
 fish_add_path $PYENV_ROOT/bin
 
-oh-my-posh --init --shell fish --config ~/mytheme.omp.json | source
+~/bin/oh-my-posh --init --shell fish --config ~/mytheme.omp.json | source
 pyenv init - | source
 fnm env --use-on-cd | source
 
@@ -64,7 +64,7 @@ end
 complete --command aws --no-files --arguments '(begin; set --local --export COMP_SHELL fish; set --local --export COMP_LINE (commandline); aws_completer | sed \'s/ $//\'; end)'
 
 # pack completions (docker image build system)
-source (pack completion --shell fish)
+# source (pack completion --shell fish)
 
 source (fnm completions --shell fish | psub)
 
