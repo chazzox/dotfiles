@@ -24,3 +24,7 @@ stow  --dir=[full-repo-path] --target=$HOME .
 ```
 
 that's it! if you ever want to add a new file, create it inside this repo, then re run the stow command
+
+
+
+make sure you switch the correct branch. main is for my ubunutu setup, and you can figure out the rest
