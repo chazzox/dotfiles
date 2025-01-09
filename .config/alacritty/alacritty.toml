@@ -1,7 +1,7 @@
 
 [window]
 dynamic_padding = true
-padding = { x = 0, y = 0 }
+padding = { x = 0, y = 20 }
 opacity = 1
 decorations = "Transparent"
 
@@ -13,8 +13,7 @@ family = "FiraCode Nerd Font"
 
 [keyboard]
 bindings = [
- { key = "N", mods = "Command", action = "CreateNewWindow" },
- { key = "Space", mods = "Control", command = { program = "sh", args = ["/home/chazzox-ubuntu/.config/alacritty/toggle_albert.sh" ] } }
+ { key = "N", mods = "Command", action = "CreateNewWindow" }
 ]
 
 # https://github.com/alacritty/alacritty-theme/blob/master/themes/pastel_dark.toml
@@ -51,5 +50,3 @@ white    = '#FFFEFF'
 
 [general]
 live_config_reload = true
-# root stuff
-working_directory = "/home/chazzox-ubuntu"
