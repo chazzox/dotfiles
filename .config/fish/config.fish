@@ -2,6 +2,10 @@ function lsd
   eza --icons -alh $argv
 end
 
+function rhul_comp
+  gcc -Wall -Werror -Wpedantic $argv
+end
+
 function progress-commit
  set -f commit_name (git rev-parse --abbrev-ref HEAD | tr '/' '\n' | sed -n 2p)
  read -p "set_color green; echo -n 'commit description'; set_color normal; echo -n ': '" commit_description
