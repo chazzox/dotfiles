@@ -26,8 +26,6 @@ end
 function ra; tmux attach-session -d -t base; end
 function ran; tmux new-session -d -s base; end
 
-function glow; GLOW -p; end
-
 function ls
   command eza $argv --icons 
 end
