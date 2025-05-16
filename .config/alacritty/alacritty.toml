@@ -1,9 +1,6 @@
-
 [window]
 dynamic_padding = true
-padding = { x = 0, y = 0 }
-opacity = 1
-decorations = "Transparent"
+decorations='full'
 
 [font]
 size = 12
@@ -52,4 +49,4 @@ white    = '#FFFEFF'
 [general]
 live_config_reload = true
 # root stuff
-working_directory = "/home/chazzox-ubuntu"
+working_directory = "/home/chazzox"

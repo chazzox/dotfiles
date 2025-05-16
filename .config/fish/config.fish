@@ -46,7 +46,6 @@ end
 
 set -gx EDITOR "nvim"
 
-# source $HOME/.config/fish/work-secrets.fish
 
 set -Ux PYENV_ROOT $HOME/.pyenv
 
