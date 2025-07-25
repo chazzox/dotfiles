@@ -1,6 +1,6 @@
 [window]
 dynamic_padding = true
-decorations='full'
+decorations='buttonless'
 
 [font]
 size = 12
