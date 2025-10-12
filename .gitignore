@@ -1,3 +1,4 @@
 .nvimlog
 work-secrets.fish
 .npmrc
+.DS_Store

@@ -58,12 +58,6 @@ oh-my-posh --init --shell fish --config ~/mytheme.omp.json | source
 pyenv init - | source
 fnm env --use-on-cd | source
 
-# pnpm
-set -gx PNPM_HOME "/Users/charlie/Library/pnpm"
-if not string match -q -- $PNPM_HOME $PATH
-  set -gx PATH "$PNPM_HOME" $PATH
-end
-# pnpm end
 
 # aws completions
 complete --command aws --no-files --arguments '(begin; set --local --export COMP_SHELL fish; set --local --export COMP_LINE (commandline); aws_completer | sed \'s/ $//\'; end)'
@@ -80,3 +74,5 @@ if test "$sysName" = "Darwin"
 end
 
 bind \cw backward-kill-word
+
+set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; set -gx PATH $HOME/.cabal/bin /Users/chazzox/.ghcup/bin $PATH # ghcup-env
