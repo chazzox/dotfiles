@@ -44,6 +44,9 @@ require("lazy").setup({
 			config = function()
 				vim.opt.background = "dark"
 				vim.cmd.colorscheme = "oxocarbon"
+				vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+				vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+				vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
 			end,
 		},
 		{ "stevearc/conform.nvim", opts = {} },
@@ -78,7 +81,7 @@ require("conform").setup({
 })
 
 require("nvim-treesitter.configs").setup({
-	ensure_installed = { "c", "lua", "python", "haskell", "fish" },
+	ensure_installed = { "c", "lua", "python", "haskell", "fish", "verilog" },
 	highlight = { enable = true },
 })
 

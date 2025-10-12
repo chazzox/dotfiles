@@ -48,5 +48,7 @@ white    = '#FFFEFF'
 
 [general]
 live_config_reload = true
+ipc_socket = true
+
 # root stuff
 working_directory = "/home/chazzox"
