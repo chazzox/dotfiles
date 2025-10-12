@@ -38,10 +38,27 @@ vim.opt.title = true
 -- lazy config
 require("lazy").setup({
 	spec = {
-		{ "dag/vim-fish" },
-		{ "nyoom-engineering/oxocarbon.nvim" },
+		{
+			"nyoom-engineering/oxocarbon.nvim",
+			lazy = false,
+			config = function()
+				vim.opt.background = "dark"
+				vim.cmd.colorscheme = "oxocarbon"
+			end,
+		},
 		{ "stevearc/conform.nvim", opts = {} },
-		{ "nvim-telescope/telescope.nvim", tag = "0.1.8", dependencies = { "nvim-lua/plenary.nvim" } },
+		{
+			"nvim-telescope/telescope.nvim",
+			tag = "0.1.8",
+			dependencies = { "nvim-lua/plenary.nvim" },
+			config = function()
+				local builtin = require("telescope.builtin")
+				vim.keymap.set("n", "<leader>ff", builtin.git_files, { desc = "Telescope find files" })
+				vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
+				vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
+				vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Telescope help tags" })
+			end,
+		},
 		{ "mrcjkb/haskell-tools.nvim", version = "^6", lazy = false },
 		{ "nvim-treesitter/nvim-treesitter", branch = "master", lazy = false, build = ":TSUpdate" },
 	},
@@ -65,5 +82,25 @@ require("nvim-treesitter.configs").setup({
 	highlight = { enable = true },
 })
 
-vim.opt.background = "dark" -- set this to dark or light
-vim.cmd.colorscheme = "oxocarbon"
+require("telescope").setup({
+	defaults = {
+		vimgrep_arguments = {
+			"rg",
+			"--color=never",
+			"--no-heading",
+			"--with-filename",
+			"--line-number",
+			"--column",
+			"--smart-case",
+			"--hidden", -- include hidden files
+			"--glob",
+			"!.git/*", -- exclude everything inside .git
+		},
+	},
+	pickers = {
+		live_grep = {
+			hidden = true,
+			ii,
+		},
+	},
+})
