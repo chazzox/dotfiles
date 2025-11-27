@@ -1,4 +1,6 @@
 -- CHAZZOX NVIM CONFIG
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 
 -- configuring lazy
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -30,7 +32,7 @@ vim.opt.textwidth = 80
 vim.opt.wrapmargin = 2 -- word wrap
 vim.opt.backup = false
 vim.opt.writebackup = false -- no annoying backup files
-vim.opt.relativenumber = true
+vim.opt.number = true
 
 -- configure title string
 vim.opt.title = true
@@ -53,7 +55,7 @@ require("lazy").setup({
 			keys = {
 				{
 					-- Customize or remove this keymap to your liking
-					"<leader>fn",
+					"F",
 					function()
 						require("conform").format({ async = true })
 					end,
@@ -66,26 +68,42 @@ require("lazy").setup({
 			opts = {},
 		},
 		{
+			"kyazdani42/nvim-tree.lua",
+		},
+		{
 			"nvim-telescope/telescope.nvim",
 			tag = "0.1.8",
 			dependencies = { "nvim-lua/plenary.nvim" },
 			config = function()
 				local builtin = require("telescope.builtin")
-				vim.keymap.set("n", "<leader>ff", builtin.git_files, { desc = "Telescope find files" })
 				vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
-				vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
 				vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Telescope help tags" })
+				vim.keymap.set("n", "<leader>t", builtin.treesitter, { desc = "Telescope treesitter" })
 			end,
 		},
 		{
-			"nvim-telescope/telescope-file-browser.nvim",
-			dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+			"akinsho/bufferline.nvim",
+			version = "*",
+			dependencies = "nvim-tree/nvim-web-devicons",
+			config = function()
+				require("bufferline").setup({})
+			end,
 		},
 		{ "mrcjkb/haskell-tools.nvim", version = "^6", lazy = false },
 		{ "nvim-treesitter/nvim-treesitter", branch = "master", lazy = false, build = ":TSUpdate" },
+		{
+			"Wansmer/treesj",
+			keys = { { "J", "<cmd>TSJToggle<cr>", desc = "Join Toggle" } },
+			opts = { use_default_keymaps = false, max_join_length = 150 },
+			config = function()
+				require("treesj").setup({})
+			end,
+		},
 	},
 	checker = { enabled = true },
 })
+
+require("nvim-tree").setup({})
 
 require("conform").setup({
 	formatters_by_ft = {
@@ -94,19 +112,34 @@ require("conform").setup({
 		haskell = { "ormolu" },
 		toml = { "pyproject-fmt" },
 	},
-	format_on_save = {
-		timeout_ms = 500,
-		lsp_format = "fallback",
-	},
+	format_on_save = { timeout_ms = 500, lsp_format = "fallback" },
 })
 
 require("nvim-treesitter.configs").setup({
-	ensure_installed = { "c", "lua", "python", "haskell", "fish", "verilog" },
-	highlight = { enable = true },
+	ensure_installed = {
+		"toml",
+		"c",
+		"python",
+		"haskell",
+		"fish",
+		"verilog",
+		"lua",
+	},
+	highlight = {
+		enable = true,
+	},
 })
 
 require("telescope").setup({
 	defaults = {
+		theme = "center",
+		sorting_strategy = "ascending",
+		layout_config = {
+			horizontal = {
+				prompt_position = "top",
+				preview_width = 0.3,
+			},
+		},
 		vimgrep_arguments = {
 			"rg",
 			"--color=never",
@@ -121,21 +154,24 @@ require("telescope").setup({
 		},
 	},
 	pickers = {
-		live_grep = {
-			hidden = true,
-			ii,
-		},
-	},
-	extensions = {
-		file_browser = {
-			hijack_netrw = true,
-			hidden = {
-				file_browser = true,
-				folder_browser = true,
-			},
-		},
+		live_grep = { hidden = true, ii },
 	},
 })
 
-require("telescope").load_extension("file_browser")
-vim.keymap.set("n", "<space>fb", ":Telescope file_browser path=%:p:h select_buffer=true<CR>")
+-- random keybinds
+vim.keymap.set("n", "<C-s>", vim.cmd.write, { desc = "save file" })
+
+vim.keymap.set("n", "FB", function()
+	vim.cmd("NvimTreeToggle")
+end, { desc = "save file" })
+
+vim.keymap.set("n", "<C-w>", function()
+	vim.cmd("NvimTreeClose")
+	vim.cmd.bd()
+end, { desc = "close buffer" })
+
+vim.keymap.set("n", "<leader>nc", function()
+	vim.cmd("e " .. vim.fn.stdpath("config") .. "/init.lua")
+end, { desc = "edit config file" })
+
+-- eof
