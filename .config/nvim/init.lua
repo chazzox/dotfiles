@@ -21,7 +21,7 @@ vim.opt.rtp:prepend(lazypath)
 vim.opt.clipboard:append({ "unnamed", "unnamedplus" })
 vim.o.termguicolors = true
 vim.opt.encoding = "UTF-8"
-vim.opt.cursorline = true
+-- vim.opt.cursorline = true
 vim.opt.mouse = "a"
 vim.opt.scrolloff = 12
 vim.opt.tabstop = 4
@@ -44,12 +44,27 @@ require("lazy").setup({
 			config = function()
 				vim.opt.background = "dark"
 				vim.cmd.colorscheme = "oxocarbon"
-				vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-				vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
-				vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
 			end,
 		},
-		{ "stevearc/conform.nvim", opts = {} },
+		{
+			"stevearc/conform.nvim",
+			event = { "BufWritePre" },
+			cmd = { "ConformInfo" },
+			keys = {
+				{
+					-- Customize or remove this keymap to your liking
+					"<leader>fn",
+					function()
+						require("conform").format({ async = true })
+					end,
+					mode = "",
+					desc = "Format buffer",
+				},
+			},
+			---@module "conform"
+			---@type conform.setupOpts
+			opts = {},
+		},
 		{
 			"nvim-telescope/telescope.nvim",
 			tag = "0.1.8",
@@ -62,6 +77,10 @@ require("lazy").setup({
 				vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Telescope help tags" })
 			end,
 		},
+		{
+			"nvim-telescope/telescope-file-browser.nvim",
+			dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+		},
 		{ "mrcjkb/haskell-tools.nvim", version = "^6", lazy = false },
 		{ "nvim-treesitter/nvim-treesitter", branch = "master", lazy = false, build = ":TSUpdate" },
 	},
@@ -73,6 +92,7 @@ require("conform").setup({
 		lua = { "stylua" },
 		fish = { "fish_indent" },
 		haskell = { "ormolu" },
+		toml = { "pyproject-fmt" },
 	},
 	format_on_save = {
 		timeout_ms = 500,
@@ -106,4 +126,16 @@ require("telescope").setup({
 			ii,
 		},
 	},
+	extensions = {
+		file_browser = {
+			hijack_netrw = true,
+			hidden = {
+				file_browser = true,
+				folder_browser = true,
+			},
+		},
+	},
 })
+
+require("telescope").load_extension("file_browser")
+vim.keymap.set("n", "<space>fb", ":Telescope file_browser path=%:p:h select_buffer=true<CR>")

@@ -78,19 +78,3 @@ bind \cw backward-kill-word
 
 set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME
 set -gx PATH $HOME/.cabal/bin /Users/chazzox/.ghcup/bin $PATH # ghcup-env
-
-# lowers window opacity when in nvim
-function nvim
-    # If we're inside Alacritty, lower opacity
-    if set -q ALACRITTY_WINDOW_ID
-        alacritty msg config 'window.opacity=0.6'
-    end
-
-    # Run the real Neovim
-    command nvim $argv
-
-    # When Neovim exits, restore opacity
-    if set -q ALACRITTY_WINDOW_ID
-        alacritty msg config 'window.opacity=1'
-    end
-end
