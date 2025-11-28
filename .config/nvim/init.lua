@@ -49,6 +49,11 @@ require("lazy").setup({
 			end,
 		},
 		{
+			"windwp/nvim-autopairs",
+			event = "InsertEnter",
+			config = true,
+		},
+		{
 			"stevearc/conform.nvim",
 			event = { "BufWritePre" },
 			cmd = { "ConformInfo" },
@@ -67,9 +72,7 @@ require("lazy").setup({
 			---@type conform.setupOpts
 			opts = {},
 		},
-		{
-			"kyazdani42/nvim-tree.lua",
-		},
+		{ "kyazdani42/nvim-tree.lua" },
 		{
 			"nvim-telescope/telescope.nvim",
 			tag = "0.1.8",
@@ -99,9 +102,27 @@ require("lazy").setup({
 				require("treesj").setup({})
 			end,
 		},
+		{ "mason-org/mason.nvim", opts = {} },
+		{
+			"mason-org/mason-lspconfig.nvim",
+			opts = { ensure_installed = { "lua_ls" } },
+			dependencies = { "neovim/nvim-lspconfig" },
+		},
+		{ "hrsh7th/nvim-cmp", config = function() end },
 	},
 	checker = { enabled = true },
 })
+
+-- lsp settings
+vim.lsp.config("lua_ls", {
+	capabbilties = lsp,
+})
+vim.lsp.enable("lua_ls")
+
+vim.keymap.set("n", "<leader>i", function()
+	vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ 0 }), { 0 })
+end)
+-- end lsp settings
 
 require("nvim-tree").setup({})
 
@@ -165,7 +186,7 @@ vim.keymap.set("n", "FB", function()
 	vim.cmd("NvimTreeToggle")
 end, { desc = "save file" })
 
-vim.keymap.set("n", "<C-w>", function()
+vim.keymap.set("n", "<leader>w", function()
 	vim.cmd("NvimTreeClose")
 	vim.cmd.bd()
 end, { desc = "close buffer" })
@@ -173,5 +194,10 @@ end, { desc = "close buffer" })
 vim.keymap.set("n", "<leader>nc", function()
 	vim.cmd("e " .. vim.fn.stdpath("config") .. "/init.lua")
 end, { desc = "edit config file" })
+
+vim.keymap.set("n", "<Tab>", vim.cmd.bNext)
+vim.keymap.set("n", "<leader>vd", function()
+	vim.diagnostic.open_float()
+end, opts)
 
 -- eof
