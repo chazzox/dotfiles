@@ -72,7 +72,16 @@ require("lazy").setup({
 			---@type conform.setupOpts
 			opts = {},
 		},
-		{ "kyazdani42/nvim-tree.lua" },
+		{
+			"nvim-neo-tree/neo-tree.nvim",
+			branch = "v3.x",
+			dependencies = {
+				"nvim-lua/plenary.nvim",
+				"MunifTanjim/nui.nvim",
+				"nvim-tree/nvim-web-devicons", -- optional, but recommended
+			},
+			lazy = false, -- neo-tree will lazily load itself
+		},
 		{
 			"nvim-telescope/telescope.nvim",
 			tag = "0.1.8",
@@ -123,8 +132,6 @@ vim.keymap.set("n", "<leader>i", function()
 	vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ 0 }), { 0 })
 end)
 -- end lsp settings
-
-require("nvim-tree").setup({})
 
 require("conform").setup({
 	formatters_by_ft = {
@@ -179,15 +186,22 @@ require("telescope").setup({
 	},
 })
 
+require("neo-tree").setup({
+	filesystem = {
+		filtered_items = {
+			hide_dotfiles = false,
+		},
+	},
+})
 -- random keybinds
 vim.keymap.set("n", "<C-s>", vim.cmd.write, { desc = "save file" })
 
 vim.keymap.set("n", "FB", function()
-	vim.cmd("NvimTreeToggle")
+	vim.cmd("Neotree filesystem toggle left")
 end, { desc = "save file" })
 
 vim.keymap.set("n", "<leader>w", function()
-	vim.cmd("NvimTreeClose")
+	vim.cmd("Neotree close")
 	vim.cmd.bd()
 end, { desc = "close buffer" })
 

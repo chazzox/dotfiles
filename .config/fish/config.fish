@@ -66,7 +66,6 @@ complete --command aws --no-files --arguments '(begin; set --local --export COMP
 
 # pack completions (docker image build system)
 # source (pack completion --shell fish)
-
 source (fnm completions --shell fish | psub)
 
 set -g sysName (uname)
