@@ -54,6 +54,135 @@ require("lazy").setup({
 			config = true,
 		},
 		{
+			"nvim-neo-tree/neo-tree.nvim",
+			branch = "v3.x",
+			dependencies = {
+				"nvim-lua/plenary.nvim",
+				"MunifTanjim/nui.nvim",
+				"nvim-tree/nvim-web-devicons", -- optional, but recommended
+			},
+			lazy = false, -- neo-tree will lazily load itself
+		},
+		{
+			"akinsho/bufferline.nvim",
+			version = "*",
+			dependencies = "nvim-tree/nvim-web-devicons",
+			config = function()
+				require("bufferline").setup({})
+			end,
+		},
+		{
+			"nvim-treesitter/nvim-treesitter",
+			branch = "master",
+			lazy = false,
+			build = ":TSUpdate",
+		},
+		{
+			"Wansmer/treesj",
+			keys = { { "J", "<cmd>TSJToggle<cr>", desc = "Join Toggle" } },
+			opts = { use_default_keymaps = false, max_join_length = 150 },
+			config = function()
+				require("treesj").setup({})
+			end,
+		},
+		{
+			"folke/lazydev.nvim",
+			ft = "lua", -- only load on lua files
+			opts = {
+				library = {
+					-- See the configuration section for more details
+					-- Load luvit types when the `vim.uv` word is found
+					{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+				},
+			},
+		},
+		{
+			"mason-org/mason-lspconfig.nvim",
+			opts = {
+				ensure_installed = {
+					"lua_ls",
+					"ts_ls",
+					"fish_lsp",
+				},
+				automatic_installation = true,
+			},
+			dependencies = {
+				{ "mason-org/mason.nvim", opts = {} },
+				"neovim/nvim-lspconfig",
+			},
+			config = function()
+				local capabilities = require("cmp_nvim_lsp").default_capabilities()
+				vim.lsp.config.lua_ls = {
+					cmd = { "lua-language-server" },
+					root_markers = { ".luarc.json", ".git" },
+					capabilities = capabilities,
+					settings = {
+						Lua = {
+							runtime = { version = "LuaJIT" },
+							diagnostics = { globals = { "vim" } },
+							workspace = {
+								library = vim.api.nvim_get_runtime_file("", true),
+								checkThirdParty = false,
+							},
+							telemetry = { enable = false },
+						},
+					},
+				}
+				vim.lsp.enable({ "lua_ls" })
+			end,
+		},
+		{
+			"hrsh7th/nvim-cmp",
+			dependencies = {
+				"hrsh7th/cmp-nvim-lsp",
+				"hrsh7th/cmp-buffer",
+				"hrsh7th/cmp-path",
+				"L3MON4D3/LuaSnip",
+				"saadparwaiz1/cmp_luasnip",
+			},
+			config = function()
+				local cmp = require("cmp")
+				local luasnip = require("luasnip")
+
+				cmp.setup({
+					snippet = {
+						expand = function(args)
+							luasnip.lsp_expand(args.body)
+						end,
+					},
+					mapping = cmp.mapping.preset.insert({
+						["<C-Space>"] = cmp.mapping.complete(),
+						["<CR>"] = cmp.mapping.confirm({ select = true }),
+						["<Tab>"] = cmp.mapping(function(fallback)
+							if cmp.visible() then
+								cmp.select_next_item()
+							elseif luasnip.expand_or_jumpable() then
+								luasnip.expand_or_jump()
+							else
+								fallback()
+							end
+						end, { "i", "s" }),
+						["<S-Tab>"] = cmp.mapping(function(fallback)
+							if cmp.visible() then
+								cmp.select_prev_item()
+							elseif luasnip.jumpable(-1) then
+								luasnip.jump(-1)
+							else
+								fallback()
+							end
+						end, { "i", "s" }),
+					}),
+					sources = cmp.config.sources({
+						{ name = "lazydev" },
+						{ name = "nvim_lsp" },
+						{ name = "luasnip" },
+						{ name = "buffer" },
+						{ name = "path" },
+					}),
+				})
+			end,
+		},
+		{
 			"stevearc/conform.nvim",
 			event = { "BufWritePre" },
 			cmd = { "ConformInfo" },
@@ -70,67 +199,30 @@ require("lazy").setup({
 			},
 			---@module "conform"
 			---@type conform.setupOpts
-			opts = {},
-		},
-		{
-			"nvim-neo-tree/neo-tree.nvim",
-			branch = "v3.x",
-			dependencies = {
-				"nvim-lua/plenary.nvim",
-				"MunifTanjim/nui.nvim",
-				"nvim-tree/nvim-web-devicons", -- optional, but recommended
+			opts = {
+				default_format_opts = {
+					lsp_format = "fallback",
+				},
 			},
-			lazy = false, -- neo-tree will lazily load itself
 		},
-		{
-			"nvim-telescope/telescope.nvim",
-			tag = "0.1.8",
-			dependencies = { "nvim-lua/plenary.nvim" },
-			config = function()
-				local builtin = require("telescope.builtin")
-				vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
-				vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Telescope help tags" })
-				vim.keymap.set("n", "<leader>t", builtin.treesitter, { desc = "Telescope treesitter" })
-			end,
-		},
-		{
-			"akinsho/bufferline.nvim",
-			version = "*",
-			dependencies = "nvim-tree/nvim-web-devicons",
-			config = function()
-				require("bufferline").setup({})
-			end,
-		},
-		{ "mrcjkb/haskell-tools.nvim", version = "^6", lazy = false },
-		{ "nvim-treesitter/nvim-treesitter", branch = "master", lazy = false, build = ":TSUpdate" },
-		{
-			"Wansmer/treesj",
-			keys = { { "J", "<cmd>TSJToggle<cr>", desc = "Join Toggle" } },
-			opts = { use_default_keymaps = false, max_join_length = 150 },
-			config = function()
-				require("treesj").setup({})
-			end,
-		},
-		{ "mason-org/mason.nvim", opts = {} },
-		{
-			"mason-org/mason-lspconfig.nvim",
-			opts = { ensure_installed = { "lua_ls" } },
-			dependencies = { "neovim/nvim-lspconfig" },
-		},
-		{ "hrsh7th/nvim-cmp", config = function() end },
 	},
 	checker = { enabled = true },
 })
 
 -- lsp settings
-vim.lsp.config("lua_ls", {
-	capabbilties = lsp,
-})
-vim.lsp.enable("lua_ls")
-
 vim.keymap.set("n", "<leader>i", function()
 	vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ 0 }), { 0 })
 end)
+
+vim.api.nvim_create_autocmd("LspAttach", {
+	callback = function(args)
+		local opts = { buffer = args.buf }
+		vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+		vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+		vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+		vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+	end,
+})
 -- end lsp settings
 
 require("conform").setup({
@@ -158,34 +250,6 @@ require("nvim-treesitter.configs").setup({
 	},
 })
 
-require("telescope").setup({
-	defaults = {
-		theme = "center",
-		sorting_strategy = "ascending",
-		layout_config = {
-			horizontal = {
-				prompt_position = "top",
-				preview_width = 0.3,
-			},
-		},
-		vimgrep_arguments = {
-			"rg",
-			"--color=never",
-			"--no-heading",
-			"--with-filename",
-			"--line-number",
-			"--column",
-			"--smart-case",
-			"--hidden", -- include hidden files
-			"--glob",
-			"!.git/*", -- exclude everything inside .git
-		},
-	},
-	pickers = {
-		live_grep = { hidden = true, ii },
-	},
-})
-
 require("neo-tree").setup({
 	filesystem = {
 		filtered_items = {
@@ -193,6 +257,7 @@ require("neo-tree").setup({
 		},
 	},
 })
+
 -- random keybinds
 vim.keymap.set("n", "<C-s>", vim.cmd.write, { desc = "save file" })
 
@@ -213,5 +278,3 @@ vim.keymap.set("n", "<Tab>", vim.cmd.bNext)
 vim.keymap.set("n", "<leader>vd", function()
 	vim.diagnostic.open_float()
 end, opts)
-
--- eof
