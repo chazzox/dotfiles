@@ -128,7 +128,7 @@ require("lazy").setup({
 						},
 					},
 				}
-				vim.lsp.enable({ "lua_ls" })
+				vim.lsp.enable({ "lua_ls", "fish_lsp" })
 			end,
 		},
 		{
