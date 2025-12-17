@@ -1,6 +1,7 @@
-function lsd
-    eza --icons -alh $argv
-end
+alias lsd "eza --icons -alh $argv"
+alias comp "cd ~/code/RHUL/year-3/dissertation-work/final-year-project/"
+
+git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 
 function rhul_comp
     gcc -Wall -Werror -Wpedantic $argv
@@ -28,10 +29,6 @@ function ra
 end
 function ran
     tmux new-session -d -s base
-end
-
-function glow
-    GLOW -p
 end
 
 function ls
@@ -64,14 +61,15 @@ fnm env --use-on-cd | source
 # aws completions
 complete --command aws --no-files --arguments '(begin; set --local --export COMP_SHELL fish; set --local --export COMP_LINE (commandline); aws_completer | sed \'s/ $//\'; end)'
 
-# pack completions (docker image build system)
-# source (pack completion --shell fish)
 source (fnm completions --shell fish | psub)
 
+# hold key to repeat system setting on macos
 set -g sysName (uname)
 if test "$sysName" = Darwin
     defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 end
+
+glow completion fish | source
 
 bind \cw backward-kill-word
 

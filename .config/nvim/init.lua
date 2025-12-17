@@ -41,6 +41,11 @@ vim.opt.title = true
 require("lazy").setup({
 	spec = {
 		{
+			"mrcjkb/haskell-tools.nvim",
+			version = "^6", -- Recommended
+			lazy = false, -- This plugin is already lazy
+		},
+		{
 			"nyoom-engineering/oxocarbon.nvim",
 			lazy = false,
 			config = function()
@@ -79,7 +84,7 @@ require("lazy").setup({
 		},
 		{
 			"Wansmer/treesj",
-			keys = { { "J", "<cmd>TSJToggle<cr>", desc = "Join Toggle" } },
+			keys = { { "<leader>j", "<cmd>TSJToggle<cr>", desc = "Join Toggle" } },
 			opts = { use_default_keymaps = false, max_join_length = 150 },
 			config = function()
 				require("treesj").setup({})
@@ -90,8 +95,6 @@ require("lazy").setup({
 			ft = "lua", -- only load on lua files
 			opts = {
 				library = {
-					-- See the configuration section for more details
-					-- Load luvit types when the `vim.uv` word is found
 					{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
 				},
 			},
@@ -99,11 +102,7 @@ require("lazy").setup({
 		{
 			"mason-org/mason-lspconfig.nvim",
 			opts = {
-				ensure_installed = {
-					"lua_ls",
-					"ts_ls",
-					"fish_lsp",
-				},
+				ensure_installed = { "lua_ls", "ts_ls", "fish_lsp" },
 				automatic_installation = true,
 			},
 			dependencies = {
@@ -199,11 +198,7 @@ require("lazy").setup({
 			},
 			---@module "conform"
 			---@type conform.setupOpts
-			opts = {
-				default_format_opts = {
-					lsp_format = "fallback",
-				},
-			},
+			opts = { default_format_opts = { lsp_format = "fallback" } },
 		},
 	},
 	checker = { enabled = true },
@@ -236,27 +231,11 @@ require("conform").setup({
 })
 
 require("nvim-treesitter.configs").setup({
-	ensure_installed = {
-		"toml",
-		"c",
-		"python",
-		"haskell",
-		"fish",
-		"verilog",
-		"lua",
-	},
-	highlight = {
-		enable = true,
-	},
+	ensure_installed = { "toml", "c", "python", "haskell", "fish", "verilog", "lua" },
+	highlight = { enable = true },
 })
 
-require("neo-tree").setup({
-	filesystem = {
-		filtered_items = {
-			hide_dotfiles = false,
-		},
-	},
-})
+require("neo-tree").setup({ filesystem = { filtered_items = { hide_dotfiles = false } } })
 
 -- random keybinds
 vim.keymap.set("n", "<C-s>", vim.cmd.write, { desc = "save file" })
@@ -265,10 +244,16 @@ vim.keymap.set("n", "FB", function()
 	vim.cmd("Neotree filesystem toggle left")
 end, { desc = "save file" })
 
-vim.keymap.set("n", "<leader>w", function()
+function Close()
 	vim.cmd("Neotree close")
+	if #(vim.api.nvim_list_bufs()) == 1 then
+		vim.cmd("quit")
+	end
 	vim.cmd.bd()
-end, { desc = "close buffer" })
+end
+
+vim.keymap.set("n", "<leader>w", Close, { desc = "close buffer" })
+vim.keymap.set("n", "<C-w>", Close, { desc = "close buffer" })
 
 vim.keymap.set("n", "<leader>nc", function()
 	vim.cmd("e " .. vim.fn.stdpath("config") .. "/init.lua")
