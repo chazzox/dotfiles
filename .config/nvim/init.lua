@@ -224,14 +224,27 @@ require("conform").setup({
 	formatters_by_ft = {
 		lua = { "stylua" },
 		fish = { "fish_indent" },
-		haskell = { "ormolu" },
+		haskell = { "fourmolu" },
 		toml = { "pyproject-fmt" },
 	},
 	format_on_save = { timeout_ms = 500, lsp_format = "fallback" },
 })
 
+local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+parser_config.tape = {
+	install_info = {
+		url = "https://github.com/charmbracelet/tree-sitter-vhs.git", -- local path or git repo
+		files = { "src/parser.c" }, -- note that some parsers also require src/scanner.c or src/scanner.cc
+		-- optional entries:
+		branch = "main", -- default branch in case of git repo if different from master
+		generate_requires_npm = true, -- if stand-alone parser without npm dependencies
+		requires_generate_from_grammar = true, -- if folder contains pre-generated src/parser.c
+	},
+	filetype = "tape", -- if filetype does not match the parser name
+}
+
 require("nvim-treesitter.configs").setup({
-	ensure_installed = { "toml", "c", "python", "haskell", "fish", "verilog", "lua" },
+	ensure_installed = { "tape", "toml", "c", "python", "haskell", "fish", "verilog", "lua" },
 	highlight = { enable = true },
 })
 
