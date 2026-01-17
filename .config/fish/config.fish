@@ -1,8 +1,10 @@
 alias lsd "eza --icons -alh $argv"
 alias comp "cd ~/code/RHUL/year-3/cs3920-final-year-project/source-code"
+alias sc "source ~/.config/fish/config.fish"
+alias dots_path "cd ~/code/dotfiles/"
+alias dots "cd ~/code/dotfiles/"
 
 git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-
 alias catimg "kitten icat $argv"
 
 function rhul_comp
@@ -10,6 +12,7 @@ function rhul_comp
 end
 
 function progress-commit
+    # makes matillion ticket name i belive?
     set -f commit_name (git rev-parse --abbrev-ref HEAD | tr '/' '\n' | sed -n 2p)
     read -p "set_color green; echo -n 'commit description'; set_color normal; echo -n ': '" commit_description
     git add .
@@ -54,8 +57,7 @@ set -gx EDITOR nvim
 set -Ux PYENV_ROOT $HOME/.pyenv
 
 fish_add_path $PYENV_ROOT/bin
-fish_add_path $HOME/bin
-
+fish_add_path $HOME/hlint-3.10/
 oh-my-posh --init --shell fish --config ~/mytheme.omp.json | source
 pyenv init - | source
 fnm env --use-on-cd | source
@@ -74,9 +76,6 @@ end
 glow completion fish | source
 
 bind \cw backward-kill-word
-
-set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME
-set -gx PATH $HOME/.cabal/bin /Users/chazzox/.ghcup/bin $PATH # ghcup-env
 
 # pnpm
 set -gx PNPM_HOME /Users/chazzox/Library/pnpm
@@ -128,3 +127,21 @@ set -g fish_pager_color_prefix $cyan
 set -g fish_pager_color_completion $foreground
 set -g fish_pager_color_description $comment
 set -g fish_pager_color_selected_background --background=$selection
+
+if test -d $HOME/.ghcup
+    set --local ghcup $HOME/.ghcup
+
+    if set --query GHCUP_INSTALL_BASE_PREFIX
+        set ghcup $GHCUP_INSTALL_BASE_PREFIX/.ghcup
+    end
+
+    if test -f $ghcup/env && not contains -- $ghcup/bin $fish_user_paths
+        fish_add_path --prepend --move --path $ghcup/bin
+    end
+end
+
+contains -- $HOME/.cabal/bin $fish_user_paths
+or fish_add_path --prepend --move --path $HOME/.cabal/bin
+
+contains -- $HOME/.local/bin $fish_user_paths
+or fish_add_path --prepend --move --path $HOME/.local/bin

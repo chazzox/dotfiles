@@ -6,7 +6,7 @@
 [user]
 	name = chazzox
 	email = caylott@outlook.com
-	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGNREqEiSVFTCNcmFy7EySUyXekFa5usOG/FYmrCiclL
+	signingKey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGNREqEiSVFTCNcmFy7EySUyXekFa5usOG/FYmrCiclL
 [alias]
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	pushall = !git remote | xargs -L1 git push --all
@@ -23,6 +23,7 @@
 	format = ssh
 [gpg "ssh"]
 	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+	allowedSignersFile = /Users/chazzox/.ssh/allowed_signers
 [commit]
 	gpgsign = true
 [filter "lfs"]
