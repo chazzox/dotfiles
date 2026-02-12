@@ -33,3 +33,5 @@
 	required = true
 [credential "https://git.overleaf.com"]
 	provider = generic
+[advice]
+	addEmptyPathspec = false

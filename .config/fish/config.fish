@@ -1,5 +1,6 @@
 alias lsd "eza --icons -alh $argv"
 alias comp "cd ~/code/RHUL/year-3/cs3920-final-year-project/source-code"
+alias rhul "cd ~/code/RHUL/year-3/"
 alias sc "source ~/.config/fish/config.fish"
 alias dots_path "cd ~/code/dotfiles/"
 alias dots "cd ~/code/dotfiles/"
@@ -40,17 +41,18 @@ function ls
     command eza $argv --icons
 end
 
-# do not start tmux if terminal is embedded
-#if not set -q TMUX and test "$TERM_PROGRAM" != vscode
-#    and test "$TERM_PROGRAM" != "Jetbrains.Fleet"
-#    and test "$TERM_PROGRAM" != intellij
-#    and test "$TERM_PROGRAM" != "\"intellij\""
-#    and test "$TERM_PROGRAM" != OpenLens
-#    and test "$TERMINAL_EMULATOR" != JetBrains-JediTerm
-#    set -g TMUX ran
-#    eval $TMUX
-#    ra
-#end
+set -e ENABLE_TMUX
+
+if set -q ENABLE_TMUX and not set -q TMUX and test "$TERM_PROGRAM" != vscode
+    and test "$TERM_PROGRAM" != "Jetbrains.Fleet"
+    and test "$TERM_PROGRAM" != intellij
+    and test "$TERM_PROGRAM" != "\"intellij\""
+    and test "$TERM_PROGRAM" != OpenLens
+    and test "$TERMINAL_EMULATOR" != JetBrains-JediTerm
+    set -g TMUX ran
+    eval $TMUX
+    ra
+end
 
 set -gx EDITOR nvim
 
@@ -121,3 +123,7 @@ if test "$sysName" = Darwin
 end
 
 source ~/.config/fish/colors.fish
+
+# Added by LM Studio CLI (lms)
+set -gx PATH $PATH /Users/chazzox/.lmstudio/bin
+# End of LM Studio CLI section

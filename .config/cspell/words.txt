@@ -105,10 +105,12 @@ fontsource
 fortawesome
 fpnq
 fullname
+Garnbret
 GCHQ
 Gericke
 getch
 getsyx
+ghcup
 gmail
 godarkpurple
 gogrey
@@ -131,6 +133,7 @@ Hashtables
 hgfjhgdf
 hiorns
 hitboxes
+HLINT
 HOC's
 hoogle
 Hopitals
@@ -143,6 +146,7 @@ INET
 inout
 inplace
 isdigit
+Janjia
 jank
 jhvtjdlo
 jsmkhb
@@ -237,6 +241,7 @@ psycopg
 pwls
 pygame
 QWERT
+Raboutou
 rando
 reactjs
 reduxjs
@@ -313,6 +318,7 @@ UPVOTE
 UROP
 varname
 vcodec
+verilogexecutable
 videojs
 vite
 vitejs
@@ -328,6 +334,7 @@ webext
 webextension
 werkzeug
 wkscript
+wordometer
 wscript
 xclick
 Xnor
