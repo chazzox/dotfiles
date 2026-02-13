@@ -61,11 +61,7 @@ set -Ux PYENV_ROOT $HOME/.pyenv
 fish_add_path $PYENV_ROOT/bin
 fish_add_path $HOME/hlint-3.10/
 # completions
-oh-my-posh --init --shell fish --config ~/mytheme.omp.json | source
-pyenv init - | source
-fnm env --use-on-cd | source
-source (fnm completions --shell fish | psub)
-glow completion fish | source
+oh-my-posh --init --shell fish --config ~/code/dotfiles/mytheme.omp.json | source
 
 #path stuff
 
@@ -120,10 +116,14 @@ or fish_add_path --prepend --move --path $HOME/.local/bin
 set -g sysName (uname)
 if test "$sysName" = Darwin
     defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+    pyenv init - | source
+    fnm env --use-on-cd | source
+    source (fnm completions --shell fish | psub)
+    glow completion fish | source
+end
+if test "$sysName" = MSys
+    set -Ux XDG_CONFIG_HOME "$HOME/.config"
+    source /c/ghcup/env
 end
 
 source ~/.config/fish/colors.fish
-
-# Added by LM Studio CLI (lms)
-set -gx PATH $PATH /Users/chazzox/.lmstudio/bin
-# End of LM Studio CLI section
