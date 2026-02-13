@@ -1,0 +1,34 @@
+[credential]
+	helper = manager-core
+[credential "https://dev.azure.com"]
+	useHttpPath = true
+[user]
+	name = chazzox
+	email = caylott@outlook.com
+	signingKey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGNREqEiSVFTCNcmFy7EySUyXekFa5usOG/FYmrCiclL
+[alias]
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	pushall = !git remote | xargs -L1 git push --all
+  mr = !sh -c 'git fetch $1 merge-requests/$2/head:mr-$1-$2 && git checkout mr-$1-$2' -
+[core]
+	editor = nvim
+[pull]
+	ff = only
+[init]
+	defaultBranch = main
+[push]
+	autoSetupRemote = true
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = "C:/Program Files/1Password/app/8/op-ssh-sign.exe"
+	allowedSignersFile = /Users/chazzox/.ssh/allowed_signers
+[commit]
+	gpgsign = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[credential "https://git.overleaf.com"]
+	provider = generic
