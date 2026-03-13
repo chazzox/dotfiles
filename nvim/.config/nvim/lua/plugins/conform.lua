@@ -7,6 +7,7 @@ return {
         cpp = { "astyle" },
         java = { "astyle" },
         haskell = { "fourmolu" },
+        markdown = { "mdformat" },
       },
     },
   },
