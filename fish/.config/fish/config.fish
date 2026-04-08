@@ -4,6 +4,11 @@ alias rhul "cd ~/code/RHUL/year-3/"
 alias sc "source ~/.config/fish/config.fish"
 alias dots_path "cd ~/code/dotfiles/"
 alias dots "cd ~/code/dotfiles/"
+alias cat "bat --plain $arv"
+alias song "mp3info -p \"name: %f\nduration: %mm %ss\n\" $argv"
+function delink -a f
+    cp -L $f /tmp/ && rm $f && mv /tmp/$f .
+end
 
 git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias catimg "kitten icat $argv"
@@ -33,6 +38,18 @@ end
 function ra
     tmux attach-session -d -t base
 end
+
+function lnmv
+    set dest_dir $argv[1]
+    set files $argv[2..-1]
+
+    for f in $files
+        set dest $dest_dir/$f
+        mv -- $f $dest
+        and ln -s -- $dest $f
+    end
+end
+
 function ran
     tmux new-session -d -s base
 end
@@ -40,6 +57,8 @@ end
 function ls
     command eza $argv --icons
 end
+
+set -gx JAVA_HOME /usr/local/Cellar/openjdk@21/21.0.10/libexec/openjdk.jdk/Contents/Home
 
 set -e ENABLE_TMUX
 
@@ -56,9 +75,6 @@ end
 
 set -gx EDITOR nvim
 
-set -Ux PYENV_ROOT $HOME/.pyenv
-
-fish_add_path $PYENV_ROOT/bin
 fish_add_path $HOME/hlint-3.10/
 # completions
 oh-my-posh --init --shell fish --config ~/code/dotfiles/mytheme.omp.json | source
@@ -116,7 +132,6 @@ or fish_add_path --prepend --move --path $HOME/.local/bin
 set -g sysName (uname)
 if test "$sysName" = Darwin
     defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
-    pyenv init - | source
     fnm env --use-on-cd | source
     source (fnm completions --shell fish | psub)
     glow completion fish | source

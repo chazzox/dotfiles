@@ -27,6 +27,7 @@ cdiscordify
 cdnjs
 cetz
 cgol
+chazzox
 CHAZZOX
 chazzox's
 chegg
@@ -118,6 +119,7 @@ gogrey
 googlesignin
 googleusercontent
 gopurple
+Gosper
 gosystem
 gotyping
 gridstack
@@ -131,6 +133,7 @@ gunicorn
 hackage
 hackaway
 Hashtables
+HDLS
 hgfjhgdf
 hiorns
 hitboxes
@@ -226,6 +229,7 @@ penhale
 persistor
 PINPAL
 pitems
+plumming
 pnpify
 pnpm
 Poggers
@@ -263,7 +267,6 @@ searchbar
 secon
 Segoe
 selftext
-seperate
 serviceworker
 setlength
 signin
@@ -343,5 +346,6 @@ yarnpkg
 yoink
 yoooooooooo
 yosys
+zebraw
 Zfir
 zxowp
